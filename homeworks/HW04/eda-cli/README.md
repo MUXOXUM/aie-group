@@ -1,5 +1,48 @@
 # S04 – eda_cli: HTTP-сервис качества датасетов (FastAPI)
 
+### 1. **Новая модель ответа `QualityFlagsResponse`**:
+   - `flags`: полный словарь флагов качества (включая числовые значения типа `quality_score`, `max_missing_share` и т.д.)
+   - `dataset_shape`: размеры датасета
+   - `latency_ms`: время выполнения
+   - `filename`: имя загруженного файла
+
+### 2. **Эндпоинт `/quality-flags-from-csv`**:
+   - Принимает CSV-файл через `UploadFile`
+   - Использует функции из `core.py`, которые были улучшены в HW03
+   - Возвращает **все флаги** из `compute_quality_flags`, включая:
+     - Базовые флаги: `too_few_rows`, `too_many_columns`, `too_many_missing`
+     - Новые флаги из HW03: `has_constant_columns`, `has_high_cardinality_categoricals`
+     - Числовые метрики: `quality_score`, `max_missing_share`, `high_cardinality_threshold`
+
+### 3. **Как это интегрирует HW03**:
+   - Использует улучшенную функцию `compute_quality_flags` с новыми эвристиками
+   - Демонстрирует повторное использование кода из CLI в HTTP-сервисе
+   - Предоставляет более детальную информацию, чем `/quality-from-csv`
+
+### 4. **Пример ответа**:
+```json
+{
+  "flags": {
+    "too_few_rows": true,
+    "too_many_columns": false,
+    "max_missing_share": 0.25,
+    "too_many_missing": false,
+    "has_constant_columns": true,
+    "has_high_cardinality_categoricals": false,
+    "high_cardinality_threshold": 50.0,
+    "quality_score": 0.75
+  },
+  "dataset_shape": {
+    "n_rows": 100,
+    "n_cols": 10
+  },
+  "latency_ms": 45.2,
+  "filename": "example.csv"
+}
+```
+
+---
+
 Расширенная версия проекта `eda-cli` из Семинара 03.
 
 К существующему CLI-приложению для EDA добавлен **HTTP-сервис на FastAPI** с эндпоинтами `/health`, `/quality` и `/quality-from-csv`.  

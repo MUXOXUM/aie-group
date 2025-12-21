@@ -10,7 +10,7 @@ from .core import compute_quality_flags, missing_table, summarize_dataset
 
 app = FastAPI(
     title="AIE Dataset Quality API",
-    version="0.2.0",
+    version="0.3.0",  # Обновляем версию
     description=(
         "HTTP-сервис-заглушка для оценки готовности датасета к обучению модели. "
         "Использует простые эвристики качества данных вместо настоящей ML-модели."
@@ -78,6 +78,28 @@ class QualityResponse(BaseModel):
     )
 
 
+class QualityFlagsResponse(BaseModel):
+    """Ответ с полным набором флагов качества из HW03."""
+    
+    flags: dict[str, bool | float | int] = Field(
+        ...,
+        description="Полный набор флагов качества, включая эвристики из HW03"
+    )
+    dataset_shape: dict[str, int] = Field(
+        ...,
+        description="Размеры датасета"
+    )
+    latency_ms: float = Field(
+        ...,
+        ge=0.0,
+        description="Время обработки запроса, миллисекунды"
+    )
+    filename: str = Field(
+        ...,
+        description="Имя загруженного файла"
+    )
+
+
 # ---------- Системный эндпоинт ----------
 
 
@@ -87,7 +109,7 @@ def health() -> dict[str, str]:
     return {
         "status": "ok",
         "service": "dataset-quality",
-        "version": "0.2.0",
+        "version": "0.3.0",
     }
 
 
@@ -241,4 +263,73 @@ async def quality_from_csv(file: UploadFile = File(...)) -> QualityResponse:
         latency_ms=latency_ms,
         flags=flags_bool,
         dataset_shape={"n_rows": n_rows, "n_cols": n_cols},
+    )
+
+
+# ---------- НОВЫЙ ЭНДПОИНТ: /quality-flags-from-csv ----------
+
+
+@app.post(
+    "/quality-flags-from-csv",
+    response_model=QualityFlagsResponse,
+    tags=["quality"],
+    summary="Полный набор флагов качества из HW03",
+)
+async def quality_flags_from_csv(file: UploadFile = File(...)) -> QualityFlagsResponse:
+    """
+    Эндпоинт, который принимает CSV-файл и возвращает полный набор флагов качества,
+    включая новые эвристики из HW03.
+    
+    Этот эндпоинт демонстрирует интеграцию доработок из HW03 в HTTP-сервис:
+    - Проверка константных колонок
+    - Проверка высокой кардинальности категориальных признаков
+    - Все остальные эвристики из compute_quality_flags
+    """
+    
+    start = perf_counter()
+
+    # Проверка типа файла
+    if file.content_type not in ("text/csv", "application/vnd.ms-excel", "application/octet-stream"):
+        raise HTTPException(status_code=400, detail="Ожидается CSV-файл (content-type text/csv).")
+
+    try:
+        # Читаем CSV-файл
+        df = pd.read_csv(file.file)
+    except Exception as exc:  # noqa: BLE001
+        raise HTTPException(status_code=400, detail=f"Не удалось прочитать CSV: {exc}")
+
+    if df.empty:
+        raise HTTPException(status_code=400, detail="CSV-файл не содержит данных (пустой DataFrame).")
+
+    # Используем EDA-ядро из HW03 с новыми эвристиками
+    summary = summarize_dataset(df)
+    missing_df = missing_table(df)
+    flags_all = compute_quality_flags(summary, missing_df)
+
+    latency_ms = (perf_counter() - start) * 1000.0
+
+    # Получаем размеры датасета
+    try:
+        n_rows = int(getattr(summary, "n_rows"))
+        n_cols = int(getattr(summary, "n_cols"))
+    except AttributeError:
+        n_rows = int(df.shape[0])
+        n_cols = int(df.shape[1])
+
+    # Логируем вызов
+    print(
+        f"[quality-flags-from-csv] filename={file.filename!r} "
+        f"n_rows={n_rows} n_cols={n_cols} "
+        f"latency_ms={latency_ms:.1f} ms"
+    )
+    
+    # Логируем флаги для отладки
+    print(f"[quality-flags-from-csv] flags: {flags_all}")
+
+    # Возвращаем полный набор флагов (включая числовые значения)
+    return QualityFlagsResponse(
+        flags=flags_all,
+        dataset_shape={"n_rows": n_rows, "n_cols": n_cols},
+        latency_ms=latency_ms,
+        filename=file.filename
     )
