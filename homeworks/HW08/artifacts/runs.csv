@@ -1,0 +1,6 @@
+experiment_id,dataset,seed,model_summary,dropout,batchnorm,epochs_trained,best_val_accuracy,best_val_loss
+E0,KMNIST,42,"hidden=[256]",0.0,False,NA,NA,NA
+E1,KMNIST,42,"hidden=[512, 256]",0.0,False,NA,NA,NA
+E2,KMNIST,42,"hidden=[512, 256]",0.3,False,NA,NA,NA
+E3,KMNIST,42,"hidden=[512, 256]",0.0,True,NA,NA,NA
+E4,KMNIST,42,"best(E2,E3)+early_stopping",NA,NA,NA,NA,NA

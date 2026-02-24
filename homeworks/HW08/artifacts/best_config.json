@@ -1,0 +1,6 @@
+{
+  "status": "placeholder",
+  "note": "This file is overwritten by HW08.ipynb after training.",
+  "dataset": "KMNIST",
+  "seed": 42
+}
