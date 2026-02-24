@@ -1,6 +1,6 @@
 experiment_id,dataset,seed,model_summary,dropout,batchnorm,epochs_trained,best_val_accuracy,best_val_loss
-E0,KMNIST,42,"hidden=[256]",0.0,False,NA,NA,NA
-E1,KMNIST,42,"hidden=[512, 256]",0.0,False,NA,NA,NA
-E2,KMNIST,42,"hidden=[512, 256]",0.3,False,NA,NA,NA
-E3,KMNIST,42,"hidden=[512, 256]",0.0,True,NA,NA,NA
-E4,KMNIST,42,"best(E2,E3)+early_stopping",NA,NA,NA,NA,NA
+E0,FashionMNIST,42,hidden=[256],0.0,False,20,0.895029920212766,0.30160871148109436
+E1,FashionMNIST,42,"hidden=[512, 256]",0.0,False,20,0.8981327573035626,0.31885701156360036
+E2,FashionMNIST,42,"hidden=[512, 256]",0.3,False,20,0.8934507978723404,0.30658030303868844
+E3,FashionMNIST,42,"hidden=[512, 256]",0.0,True,20,0.8939494680851063,0.3986140489578247
+E4,FashionMNIST,42,"hidden=[512, 256]",0.0,True,10,0.8911790778028205,0.3147882324583987

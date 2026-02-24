@@ -1,6 +1,14 @@
 {
-  "status": "placeholder",
-  "note": "This file is overwritten by HW08.ipynb after training.",
-  "dataset": "KMNIST",
+  "hidden_sizes": [
+    512,
+    256
+  ],
+  "dropout_p": 0.0,
+  "use_batchnorm": false,
+  "use_early_stopping": false,
+  "max_epochs": 20,
+  "batch_size": 128,
+  "learning_rate": 0.001,
+  "dataset": "FashionMNIST",
   "seed": 42
 }
