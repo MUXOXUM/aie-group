@@ -1,0 +1,26 @@
+{
+  "dataset": "KMNIST",
+  "seed": 42,
+  "device": "cpu",
+  "model": {
+    "input_dim": 784,
+    "num_classes": 10,
+    "hidden_sizes": [
+      512,
+      256
+    ],
+    "dropout": 0.3,
+    "batchnorm": false
+  },
+  "optimizer": {
+    "name": "Adam",
+    "lr": 0.001,
+    "weight_decay": 0.0
+  },
+  "early_stopping_patience": 4,
+  "epochs_trained": 6,
+  "best_val_accuracy": 1.0,
+  "best_val_loss": 0.004279000824317336,
+  "final_test_loss": 0.006111701426561922,
+  "final_test_accuracy": 0.99853515625
+}
