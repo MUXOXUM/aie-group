@@ -1,0 +1,9 @@
+{
+  "dataset": "CIFAR100",
+  "best_experiment": "C3",
+  "seed": 42,
+  "num_classes": 100,
+  "transforms": "resnet18_weights.transforms()",
+  "optimizer": "SGD",
+  "epochs": 5
+}

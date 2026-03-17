@@ -55,3 +55,6 @@ logs/
 *.tmp
 *.bak
 *.old
+
+# Исключаем большие датасеты
+homeworks/HW10-11/data
