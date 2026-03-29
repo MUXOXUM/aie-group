@@ -1,0 +1,13 @@
+{
+  "seed": 42,
+  "window_size": 48,
+  "hidden_size": 32,
+  "batch_size": 64,
+  "learning_rate": 0.001,
+  "max_epochs": 40,
+  "optimizer": "Adam",
+  "loss": "MSELoss",
+  "scaler": "StandardScaler(train target only)",
+  "device": "cpu",
+  "best_epoch": 27
+}
