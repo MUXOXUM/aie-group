@@ -1,13 +1,13 @@
 {
   "dataset": "CIFAR100",
-  "best_experiment": "C3",
+  "best_experiment": "C4",
   "seed": 42,
   "num_classes": 100,
   "model_name": "ResNet18",
   "architecture": "torchvision ResNet18 with replaced final fc layer",
   "pretrained_weights": "ResNet18_Weights.IMAGENET1K_V1",
-  "fine_tuning_scope": "head-only fine-tuning",
+  "fine_tuning_scope": "layer4 + fc fine-tuning",
   "transforms": "resnet18_weights.transforms()",
   "optimizer": "SGD",
-  "epochs": 5
+  "epochs": 8
 }

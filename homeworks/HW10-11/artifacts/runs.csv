@@ -1,7 +1,7 @@
 experiment_id,task,dataset,seed,model_summary,optimizer,lr,epochs_trained,best_val_accuracy,test_accuracy,precision,recall,mean_iou,notes
-C1,classification,CIFAR100,42,SimpleCNN,Adam,0.001,5,0.3634,,,,,base
-C2,classification,CIFAR100,42,SimpleCNN,Adam,0.001,5,0.273,,,,,aug
-C3,classification,CIFAR100,42,ResNet18(head-only),SGD,0.001,5,0.4572,0.4642,,,,head-only
-C4,classification,CIFAR100,42,ResNet18(layer4+fc),SGD,0.0001,5,0.2439,,,,,partial fine-tune
+C1,classification,CIFAR100,42,SimpleCNN,Adam,0.001,5,0.5182,,,,,base
+C2,classification,CIFAR100,42,SimpleCNN,Adam,0.001,5,0.5275,,,,,aug
+C3,classification,CIFAR100,42,ResNet18(head-only),SGD,0.001,8,0.6366,,,,,head-only
+C4,classification,CIFAR100,42,ResNet18(layer4+fc),SGD,0.0003,8,0.7061,0.7227,,,,partial fine-tune
 V1,segmentation,OxfordIIITPet,42,DeepLabV3_ResNet50,N/A,N/A,0,,,0.6574974964436787,0.9835667226282381,0.6491098009614226,threshold=0.5; foreground=pet(class=1)
 V2,segmentation,OxfordIIITPet,42,DeepLabV3_ResNet50,N/A,N/A,0,,,0.7443426616834171,0.963763471172599,0.7180194124169301,threshold=0.7; foreground=pet(class=1)
