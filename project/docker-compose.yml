@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  api:
+    build: .
+    image: car-price-estimator:latest
+    container_name: car_price_api
+    ports:
+      - "8000:8000"
+    volumes:
+      # Примонтировать папку с артефактами (обученные модели сохраняются/читаются здесь)
+      - ./artifacts:/app/artifacts
+      # Данные (опционально, для обучения изнутри контейнера)
+      - ./data:/app/data
+    environment:
+      - ARTIFACTS_DIR=artifacts/models
+      - LOG_LEVEL=info
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c",
+             "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 90s
